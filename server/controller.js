@@ -75,17 +75,18 @@ module.exports = {
 
     approveAppointment: (req, res) => {
         let {apptId} = req.body
-    
+        // console.log(apptId)
+        //the query is throwing an error by "insert"
         sequelize.query(`
-        UPDATE cc_appointments 
-        SET approved = true 
-        WHERE appt_id = ${apptId}
-        
+        UPDATE cc_appointments
+        SET approved = true
+        WHERE appt_id = ${apptId};
         
         insert into cc_emp_appts (emp_id, appt_id)
         values (${nextEmp}, ${apptId}),
         (${nextEmp + 1}, ${apptId});
         `)
+        // AND cc_emp_appts.appt_id = ${apptId}
             .then(dbRes => {
                 res.status(200).send(dbRes[0])
                 nextEmp += 2
